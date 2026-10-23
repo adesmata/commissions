@@ -6,7 +6,7 @@
 <title>@mewra</title>
 <style>
 @font-face{
-  font-family:"OCR A";
+  font-family:"OCR-A";
   src:url("OCR_A.ttf") format("truetype");
   font-weight:normal;
   font-style:normal;
@@ -14,21 +14,21 @@
 }
 
 :root{
-  --bg:#050505;
+  --bg:#000000;
   --fg:#e8e8e8;
   --line:#cfcfcf;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 *{box-sizing:border-box}
 
 body{
   margin:0;
-  background:var(--bg);
+  background:var(--bg) url("bg.png") center top/1920px 1080px fixed no-repeat;
   color:var(--fg);
-  font-family:"OCR A","DejaVu Sans Mono",Menlo,Consolas,monospace;
+  font-family:"OCR-A","DejaVu Sans Mono",Menlo,Consolas,monospace;
   min-height:100vh;
 }
 
@@ -67,25 +67,115 @@ h2{
 .tile{
   aspect-ratio:1.3/1;
   border:1px solid var(--line);
-  background:#0b0b0b;
-  position:relative;
+  background:#000;
   overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
 }
 .tile img{
+  display:block;
   width:100%;
   height:100%;
   object-fit:cover;
-  display:block;
+  object-position:center;
+  cursor:zoom-in;
 }
 
-.sprites .tile{background:#000;border-color:#bdbdbd}
-.sprites .tile img{
-  object-fit:contain;
-  image-rendering:pixelated;
-  padding:14px;
+.sprites .tile{border-color:#bdbdbd}
+
+.price{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:30px;
+  border:1px solid var(--line);
+  padding:14px 18px;
+  font-size:16px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  background:#000;
+}
+
+footer{
+  margin:0 40px;
+  border-top:1px solid var(--line);
+  padding:0 0 60px;
+}
+footer h2{margin:48px 0 28px}
+footer .term + h2{
+  margin-top:60px;
+  padding-top:48px;
+  border-top:1px solid var(--line);
+}
+
+.term{
+  border:1px solid var(--line);
+  background:#000;
+}
+.term .bar{
+  border-bottom:1px solid var(--line);
+  padding:9px 16px;
+  font-size:12px;
+  letter-spacing:.1em;
+  display:flex;
+  justify-content:space-between;
+}
+.term .body{
+  padding:18px 20px 22px;
+  font-size:14px;
+  line-height:1.7;
+}
+.term .cmd{margin:0}
+.term .p{color:var(--fg);opacity:.6}
+.term .out{
+  margin:14px 0 14px;
+  font-family:inherit;
+  font-size:inherit;
+  line-height:inherit;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.term .out a{
+  color:var(--fg);
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.term .out a:hover{text-decoration:none}
+.term .cur{
+  display:inline-block;
+  width:.6em;
+  height:1.1em;
+  background:var(--fg);
+  vertical-align:text-bottom;
+  animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+
+.lightbox{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.94);
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 24px);
+  cursor:zoom-out;
+}
+.lightbox.open{display:flex}
+.lightbox img{
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  display:block;
+}
+.lightbox .hint{
+  position:absolute;
+  top:calc(env(safe-area-inset-top,0px) + 18px);
+  right:24px;
+  font-size:13px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--fg);
 }
 
 @media(max-width:700px){
@@ -94,6 +184,12 @@ h2{
   main{padding:0 20px 60px}
   h2{font-size:30px;margin:64px 0 24px}
   .grid{grid-template-columns:repeat(2,1fr);gap:18px}
+  .price{margin-top:18px;padding:11px 12px;font-size:13px}
+  footer{margin:0 20px;padding-bottom:40px}
+  footer h2{margin:36px 0 20px}
+  footer .term + h2{margin-top:40px;padding-top:36px}
+  .term .body{padding:14px 14px 18px;font-size:12px}
+  .lightbox{padding-left:12px;padding-right:12px}
 }
 </style>
 </head>
@@ -103,39 +199,100 @@ h2{
   <div class="logo">@mewra</div>
   <nav>
     <a class="on" href="#">Home</a>
-    <a href="#">Contact</a>
+    <a href="#contact">Contact</a>
   </nav>
 </header>
 
 <main>
   <h2>Art</h2>
   <section class="grid art">
-    <div class="tile"><img src="img/art/1.png" alt=""></div>
-    <div class="tile"><img src="img/art/2.png" alt=""></div>
+    <div class="tile"><img src="img/art/1.jpg" alt=""></div>
+    <div class="tile"><img src="img/art/2.jpg" alt=""></div>
     <div class="tile"><img src="img/art/3.png" alt=""></div>
-    <div class="tile"><img src="img/art/4.png" alt=""></div>
-    <div class="tile"><img src="img/art/5.png" alt=""></div>
+    <div class="tile"><img src="img/art/4.jpg" alt=""></div>
+    <div class="tile"><img src="img/art/5.jpg" alt=""></div>
     <div class="tile"><img src="img/art/6.png" alt=""></div>
     <div class="tile"><img src="img/art/7.png" alt=""></div>
-    <div class="tile"><img src="img/art/8.png" alt=""></div>
-    <div class="tile"><img src="img/art/9.png" alt=""></div>
-    <div class="tile"><img src="img/art/10.png" alt=""></div>
-    <div class="tile"><img src="img/art/11.png" alt=""></div>
-    <div class="tile"><img src="img/art/12.png" alt=""></div>
+    <div class="tile"><img src="img/art/8.jpg" alt=""></div>
+    <div class="tile"><img src="img/art/9.jpg" alt=""></div>
   </section>
+  <div class="price"><span>AVERAGE PRICE</span><b>(30$)</b></div>
 
   <h2>Sprites</h2>
   <section class="grid sprites">
     <div class="tile"><img src="img/sprites/1.png" alt=""></div>
-    <div class="tile"><img src="img/sprites/2.png" alt=""></div>
-    <div class="tile"><img src="img/sprites/3.png" alt=""></div>
-    <div class="tile"><img src="img/sprites/4.png" alt=""></div>
-    <div class="tile"><img src="img/sprites/5.png" alt=""></div>
-    <div class="tile"><img src="img/sprites/6.png" alt=""></div>
-    <div class="tile"><img src="img/sprites/7.png" alt=""></div>
-    <div class="tile"><img src="img/sprites/8.png" alt=""></div>
+    <div class="tile"><img src="img/sprites/2.jpg" alt=""></div>
+    <div class="tile"><img src="img/sprites/3.jpg" alt=""></div>
+    <div class="tile"><img src="img/sprites/4.jpg" alt=""></div>
+    <div class="tile"><img src="img/sprites/5.jpg" alt=""></div>
+    <div class="tile"><img src="img/sprites/6.jpg" alt=""></div>
+    <div class="tile"><img src="img/sprites/7.jpg" alt=""></div>
+    <div class="tile"><img src="img/sprites/8.jpg" alt=""></div>
   </section>
+  <div class="price"><span>AVERAGE PRICE</span><b>(30$)</b></div>
 </main>
+
+<footer>
+  <h2>TOS</h2>
+  <div class="term">
+    <div class="bar"><span>mewra@tos:~</span><span>bash</span></div>
+    <div class="body">
+      <p class="cmd"><span class="p">mewra@tos:~$</span> cat tos.txt</p>
+<pre class="out">1. (Payments):> Payments are accepted via <a href="https://boosty.to/mewraworkshop" target="_blank" rel="noopener noreferrer">Boosty</a> only, as other platforms are unavailable in my country.
+2. (Usage Rights):> Feel free to use these sprites/artworks however you like. Commercial use is allowed.
+3. (Payment Terms):> Payment is split into two installments: 50% after the sprite/artwork is approved and 50% upon completion.
+4. (Deadlines):> Delivery times are agreed upon before the commission starts.
+5. (Refunds):> Payments are non-refundable once work has started.
+6. (Credit):> Crediting me is appreciated but not required. </pre>
+      <p class="cmd"><span class="p">mewra@tos:~$</span> <span class="cur"></span></p>
+    </div>
+  </div>
+
+  <h2 id="contact">Contact</h2>
+  <div class="term">
+    <div class="bar"><span>mewra@contact:~</span><span>bash</span></div>
+    <div class="body">
+      <p class="cmd"><span class="p">mewra@contact:~$</span> cat contact.txt</p>
+<pre class="out">1. (Boosty):> <a href="https://boosty.to/mewraworkshop" target="_blank" rel="noopener noreferrer">boosty.to/mewraworkshop</a>
+2. (Discord):> <a href="https://discord.com/users/1276423140938874913" target="_blank" rel="noopener noreferrer">__ghostintheshell__</a> (just copy and paste the link in discord)</pre>
+      <p class="cmd"><span class="p">mewra@contact:~$</span> <span class="cur"></span></p>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <div class="hint">(ESC)</div>
+  <img src="" alt="">
+</div>
+
+<script>
+(function(){
+  var box=document.getElementById("lightbox");
+  var big=box.querySelector("img");
+
+  function openImg(img){
+    big.src=img.currentSrc||img.src;
+    box.classList.add("open");
+    document.body.style.overflow="hidden";
+  }
+
+  function closeImg(){
+    box.classList.remove("open");
+    big.removeAttribute("src");
+    document.body.style.overflow="";
+  }
+
+  document.querySelectorAll(".tile img").forEach(function(img){
+    img.addEventListener("click",function(){openImg(img)});
+  });
+
+  box.addEventListener("click",closeImg);
+
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&box.classList.contains("open"))closeImg();
+  });
+})();
+</script>
 
 </body>
 </html>
